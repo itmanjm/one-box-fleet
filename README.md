@@ -1,6 +1,6 @@
-# Agent Ops Playbook
+# One-Box Fleet
 
-AI agent ops playbook for running a **multi-agent AI operations stack** on a single machine — the real setup we run a software business on daily, decomposed into the discrete workflows and pipelines that make up the whole.
+How to run a **multi-agent AI operations stack** on a single machine — the real setup we run a software business on daily, decomposed into the discrete workflows and pipelines that make up the whole.
 
 Every document in [`docs/`](docs/) is **self-contained**: adopt one pipeline without adopting the rest. The stack is deliberately boring — Ubuntu, Docker, GitHub, Tailscale, and an open agent harness ([Hermes Agent](https://hermes-agent.nousresearch.com)) — so everything here is reproducible on commodity hardware.
 
