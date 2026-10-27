@@ -22,6 +22,53 @@
 
 Two constants across every step: **staging-first** (never experiment in prod) and **evidence over claims** (nothing is done until verified live).
 
+## How the lifecycle is gated
+
+Between every stage sits a **gate**: a concrete, checkable condition that must be satisfied before work advances. Gates make the loop enforceable — an agent (or a rushed human) cannot skip a stage, because the next stage's tooling refuses unmet preconditions.
+
+### The gate ladder
+
+| # | Gate | Blocks | Enforced by | Who clears it |
+|---|---|---|---|---|
+| 1 | **Vetting gate** | idea → spec | a written go/no-go verdict with research citations exists | founder (or delegated owner) |
+| 2 | **Spec gate** | spec → cards | numbered, verifiable acceptance criteria + named decision owners | product lane |
+| 3 | **Pre-push gate** | code → PR | local tests/analysis run, real command output attached to the card | author (agent or human) |
+| 4 | **CI gate** | PR → merge | required status checks green (branch protection refuses the merge button) | nobody — it's mechanical |
+| 5 | **AI review gate** | PR → human review | automated reviewer comments triaged; blocking findings resolved | author |
+| 6 | **Human review gate** | PR → merge | a named approver signs off | reviewer (never the author) |
+| 7 | **Staging gate** | merge → promote | the requester verified the feature live in staging | the human who asked for it |
+| 8 | **Promotion gate** | staging → prod | PR to `main` (protected; PR-only path, so this gate can't be bypassed) | maintainer merges |
+| 9 | **Evidence gate** | deploy → done | post-deploy verification output (status codes, screenshots) attached to the card | author, witnessed by requester |
+| 10 | **Decision gates** | any irreversible/public/paid action | explicit founder accept/override recorded | founder only |
+
+### Decision-gate mechanics (the founder sign-off)
+
+Stages 1, 7, and any irreversible action use **decision gates** — and their ergonomics decide whether governance actually gets used or gets routed around:
+
+- **Surface brief.** A gate renders as a one-line ask plus optional detail — glanceable, so the founder sees *what* is being asked without reading a wall of text. Long context goes in a collapsible details section, never in the prompt line.
+- **Accept = ratify the recommendation.** Gates carry the owner's recommendation (e.g. "Accept = all four options as recommended"), so a green light is one action, not four.
+- **Override requires a reason.** Rejecting forces a written reason — it becomes the spec correction, not just a veto.
+- **Auto-expiry, not zombie blocking.** A gate nobody answers expires after a window (the work parks as `waiting`, visible on the board) instead of silently blocking the lane forever.
+- **Comments supersede.** A founder reply ("do D3 differently") retires the pending gate — a new card is stamped with the amended state. Nobody re-asks an already-answered question.
+- **Re-arm on change.** If the underlying spec is revised while a gate is pending, the old gate is superseded by a new one matching the new revision — an accept of stale wording can't clear new content.
+
+### Where gate state lives
+
+The board is the gate dashboard. In a GitHub-native setup: issues are the cards, the project board's statuses are the lifecycle stages (`Intake → Specified → In Progress → In Review → Staging → Promotion → Done`), and gate state rides as **labels and fields**:
+
+- `gate:founder` / `gate:staging` labels mark what's blocked and on whom
+- a `waiting-days` counter field makes aging gates visible before they rot
+- `blocked` + reason label for anything parked
+
+Anyone glancing at the board sees exactly which lane is waiting on which human — that's the point. Governance you can't see gets bypassed; governance that's visible at a glance gets used.
+
+### What happens on failure
+
+- **Mechanical gate fails (CI/evidence):** work stops in place; the author fixes and re-runs. No human needed for the gate itself.
+- **Review gate fails:** findings become the next iteration's card content — the review comments are the spec.
+- **Decision gate expires/rejected:** work parks or redirects per the reason. Nothing advances on silence.
+- **A gate was wrong:** the correction is written into the gate definition (the skill/playbook), so the same wrong gate doesn't fire twice. Gates learn too.
+
 ## What each stage prevents
 
 | Stage | Prevents |
