@@ -47,3 +47,14 @@ The digest is also a **dead-man's switch**: if the digest stops arriving, the bo
 | Cron jobs | completion + exit codes | silent failure is the default |
 | Disk usage | threshold | Docker build cache fills disks quietly |
 | Agent gateways | process + heartbeat | a dead gateway looks like silence, not error |
+| Fallback chain health | which tier served requests | living on fallbacks = a primary outage nobody noticed |
+
+## Logs: the aggregation story
+
+You don't need a log platform — you need a **convention**:
+
+- **Services log to journald** (systemd units) or `docker logs` (containers). Know which, for each service, in one table.
+- **Structure beats destination:** every log line carries a timestamp, a service name, and — for agent actions — the artifact it touched (card ID, commit, deploy target). "What did the agent do at 14:32" must be answerable by grep.
+- **Errors carry context or don't exist:** an error line with a stack trace but no request/job ID is decoration.
+- **Retention:** journald capped (e.g. `SystemMaxUse=2G`), Docker with a max-size log driver — unbounded logs are a disk-fill incident waiting for a quiet week ([13](13-incident-response.md)).
+- **The grep-first playbook:** for any incident, the sequence is `journalctl -u <service> --since` / `docker logs --since` → find the first error → read *upward* for the trigger. Keep it in one line per service so anyone (or any agent) can run it.

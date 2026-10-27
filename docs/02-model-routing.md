@@ -42,5 +42,11 @@ Check the `request_id` in the response — it's your evidence when disputing bil
 
 ## Cost discipline
 
-- **Free tiers for low-stakes work** (scheduled scans, digests) — but read the per-minute limits first; a tool-heavy cron job will blow a 15 req/min free tier instantly. Repin heavy crons to a paid lane.
+- **Free tiers for low-stakes work** (scheduled scans, digests) — but read the per-minute limits first; a tool-heavy cron job will blow a 15 req/min free tier instantly. Repin heavy crons to a paid lane ([14](14-scheduled-jobs.md)).
 - **Premium models for judgment** (code review, architecture), cheap models for mechanics (formatting, search summarization).
+
+## Cost visibility
+
+- Track spend **per lane**, not just per provider: a monthly total hides the fact that the research lane burns 10× the engineering lane on work a cheap model does fine.
+- Review monthly against usage; a lane whose spend grows faster than its output is either misrouted (premium model on mechanical work) or stuck in a retry loop (fix the fallback chain, don't pay for the retries).
+- Watch for the silent budget leak: fallback chains that *work* can mask a primary provider's quota exhaustion — if you're living on tier 2/3 all week, that's an alert ([07](07-monitoring.md)), not a rounding error.

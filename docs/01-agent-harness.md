@@ -49,6 +49,15 @@ Restart=on-failure
 WantedBy=default.target
 ```
 
+## Delegating between lanes
+
+Work moves between agents through the board, not through direct conversation — the card is the contract:
+
+- **One card, one owner, one claim.** Before an agent works a card it claims it (visible state change); a second agent seeing a claimed card moves on, not in parallel. This is what prevents the classic fleet failure: two agents independently solving the same task.
+- **Claims are durable.** A claim without a committed artifact (branch, draft, note) within a grace window auto-releases the card back to the queue — dead claims can't park work forever.
+- **Hand-offs happen at gate boundaries** ([06](06-work-lifecycle.md)): engineering hands to the requester at the staging gate, product hands to engineering at the spec gate. A hand-off is the card moving status + a comment with the evidence, never a private message.
+- **The orchestrator routes, never absorbs.** Its job is prioritization and arbitration; domain work goes to the domain lane. When everything routes through one agent, that agent's context becomes the bottleneck and the single point of failure.
+
 ## Pitfalls
 
 - **Don't share one profile across roles** — memory contamination is real and silent.
