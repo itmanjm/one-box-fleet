@@ -22,11 +22,11 @@ graph TB
             A3[Product agent]
             A4[Research agent]
         end
-        MR[Model Routing + Fallback (02)]
-        MEM[Memory + Skills (10)]
-        VP[Voice Pipeline (09)]
-        MON[Monitoring (07)]
-        BAK[Backups (08)]
+        MR["Model Routing + Fallback (02)"]
+        MEM["Memory + Skills (10)"]
+        VP["Voice Pipeline (09)"]
+        MON["Monitoring (07)"]
+        BAK["Backups (08)"]
     end
     subgraph GitHub["GitHub = Control Plane (04, 05)"]
         GHG[Governance + Guardrails]
