@@ -69,6 +69,7 @@ graph TB
 | 13 | [Incident Response](docs/13-incident-response.md) | Triage → root cause → verify live → write back | incidents that don't recur |
 | 14 | [Scheduled Jobs](docs/14-scheduled-jobs.md) | Idempotent crons, catch-up, dead-man's-switch | automation you can trust |
 | 15 | [App & Mobile Release](docs/15-app-release-pipeline.md) | Firebase split, signed APKs, store tracks | shipping products from the same box |
+| 16 | [Full Inventory](docs/16-full-inventory.md) | every MCP, CLI, application (SonarQube, Firecrawl…), and skill — named | seeing the whole stack |
 
 ## Bootstrap in an afternoon
 
@@ -90,7 +91,7 @@ The stack compounds — each week you can add one pipeline without re-architecti
 
 ## Hardware this runs on
 
-One Dell OptiPlex (or any 16GB+ Ubuntu box), a Raspberry Pi for ops/monitoring, and Tailscale on every device. No cloud VMs required for the ops layer itself.
+One Dell OptiPlex (or any 16GB+ Ubuntu box), a Raspberry Pi for ops/monitoring, and Tailscale on every device. No cloud VMs required for the ops layer itself. Full named inventory: [docs/16](docs/16-full-inventory.md).
 
 ## License
 
